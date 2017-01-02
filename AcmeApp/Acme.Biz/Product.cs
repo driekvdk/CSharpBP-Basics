@@ -21,6 +21,7 @@ namespace Acme.Biz
             Console.WriteLine("Product instance created");
             //this.productVendor = new Vendor();
             this.MinimumPrice = .96m;
+            this.Category = "Tools";
         }
 
         public Product(int productId, string productName, string description) : this()
@@ -49,8 +50,26 @@ namespace Acme.Biz
                 
         public string ProductName
         {
-            get { return productName; }
-            set { productName = value; }
+            get
+            {
+                string formattedValue = productName?.Trim();
+                return formattedValue;
+            }
+            set
+            {
+                if (value.Length < 3)
+                {
+                    ValidationMessage = "Productname is too short";
+                }
+                else if (value.Length < 20)
+                {
+                    ValidationMessage = "Productname is too long";
+                }
+                else
+                {
+                    productName = value;
+                }
+            }
         }
 
         private string description;
@@ -82,6 +101,13 @@ namespace Acme.Biz
             }
             set { productVendor = value; }
         }
+
+        public string ValidationMessage { get; private set; }
+
+        public string Category { get; set; }
+        public int SequenceNumber { get; set; } = 1;
+
+        public string ProductCode => this.Category + "-" + this.SequenceNumber;
 
         #endregion
 
